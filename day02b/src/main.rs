@@ -6,7 +6,6 @@ fn calculate_final_position(input: Vec<String>) -> (i64, i64, i64) {
     let mut current_pos = (0, 0, 0);
     for line in input {
         let instructions = line.split(" ").collect::<Vec<&str>>();
-        //println!("{}, {}", instructions[0], instructions[1]);
         current_pos = calculate_position(current_pos, instructions)
     }
     return current_pos
