@@ -22,7 +22,6 @@ fn calculate_position(position: (i64, i64), instructions: Vec<&str>) -> (i64, i6
 }
 
 
-
 fn main() {
     let lines = aocutils::load_input_as_strings("./input.txt".to_string());
     let position = calculate_final_position(lines);
