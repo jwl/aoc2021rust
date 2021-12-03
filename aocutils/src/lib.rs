@@ -2,9 +2,10 @@ use std::fs::File;
 use std::io::{self, BufRead, BufReader, Error, ErrorKind};
 use std::path::Path;
 
-
 pub fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-where P: AsRef<Path>, {
+where
+    P: AsRef<Path>,
+{
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
 }
@@ -13,7 +14,12 @@ pub fn load_input_as_ints(filename: String) -> Result<Vec<i64>, Error> {
     let mut vec = Vec::new();
     if let Ok(lines) = read_lines(filename) {
         for line in lines {
-            vec.push(line?.trim().parse().map_err(|e| Error::new(ErrorKind::InvalidData, e))?);
+            vec.push(
+                line?
+                    .trim()
+                    .parse()
+                    .map_err(|e| Error::new(ErrorKind::InvalidData, e))?,
+            );
         }
     }
 
@@ -24,14 +30,23 @@ pub fn load_input_as_strings(filename: String) -> Vec<String> {
     let file = File::open(filename).unwrap();
     BufReader::new(file)
         .lines()
-        .collect::<Result<_, _>>().unwrap()
+        .collect::<Result<_, _>>()
+        .unwrap()
 }
 
-// Read in file with an int in each line and and output a Vector 
+// Read in file with an int in each line and and output a Vector
 pub fn read_input_as_ints(filename: String) -> Vec<i64> {
     let file = File::open(filename).unwrap();
     BufReader::new(file)
         .lines()
-        .map(|line| line.unwrap().parse().unwrap())
+        .map(|line| line.unwrap().parse::<i64>().unwrap())
+        .collect()
+}
+
+pub fn read_input_as_binaryints(filename: String) -> Vec<i64> {
+    let file = File::open(filename).unwrap();
+    BufReader::new(file)
+        .lines()
+        .map(|line| i64::from_str_radix(line.unwrap().as_str(), 2).unwrap())
         .collect()
 }
