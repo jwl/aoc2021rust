@@ -1,5 +1,4 @@
-use aocutils;
-
+#[derive(Copy, Clone)]
 struct Board {
     numbers: [[u32; 5]; 5],
     marked: [[bool; 5]; 5],
@@ -123,30 +122,58 @@ fn parse_input_boards(input: &Vec<String>) -> Vec<Board> {
     boards
 }
 
-fn run_game(draw_numbers: Vec<u32>, mut boards: Vec<Board>) -> u32 {
+fn mark_until_win(draw_numbers: Vec<u32>, mut board: Board) -> u32 {
     for number in draw_numbers {
-        for board in &mut boards {
-            board.mark_board(number);
-            if board.has_winner() {
-                println!("We have a winner!");
-                board.print_board();
-
-                return number * board.calculate_unmarked_sum();
-            }
+        println!("in mark_until_win, number is {}", number);
+        board.mark_board(number);
+        if board.has_winner() {
+            let unmarked_sum = board.calculate_unmarked_sum();
+            println!("\tunmarked_sum is {} and number is {}", unmarked_sum, number);
+            return unmarked_sum * number;
         }
     }
+    println!("Something went wrong in mark_until_win");
+    0
+}
 
+fn find_last_winning_board(draw_numbers: Vec<u32>, mut boards: Vec<Board>) -> u32 {
+    // Returns the final score of the last winning board
+
+    for number in &draw_numbers {
+        println!("number is {}", number);
+        // Mark boards 
+        for board in &mut boards {
+            board.mark_board(*number);
+        }
+
+        // Check for winners and remove winners from collection of boards
+        boards.retain(|x| !x.has_winner());
+
+        // If last board, keep marking numbers until board wins
+        // calculate score of board
+        if boards.len() <= 1 {
+            println!("Only one remaining board left...");
+
+            boards[0].print_board();
+            return mark_until_win(draw_numbers, boards[0]);
+        }
+
+    }
+
+    println!("Something fucked up in find_last_winning_board");
     0
 }
 
 fn main() {
-    // let lines = aocutils::load_input_as_strings("./sample_input.txt".to_string());
+    // Day 04b
+    //let lines = aocutils::load_input_as_strings("./sample_input.txt".to_string());
     let lines = aocutils::load_input_as_strings("./input.txt".to_string());
     let draw_numbers = parse_input_drawnumbers(&lines[0]);
     let boards = parse_input_boards(&lines[1..].to_vec());
 
     println!(
-        "final score of winning board is {}",
-        run_game(draw_numbers, boards)
+        "final score of last board is {}",
+        find_last_winning_board(draw_numbers, boards)
     );
 }
+
