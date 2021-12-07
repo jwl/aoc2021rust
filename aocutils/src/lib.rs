@@ -1,3 +1,4 @@
+use std::fs;
 use std::fs::File;
 use std::io::{self, BufRead, BufReader, Error, ErrorKind};
 use std::path::Path;
@@ -40,6 +41,14 @@ pub fn read_input_as_ints(filename: String) -> Vec<i64> {
     BufReader::new(file)
         .lines()
         .map(|line| line.unwrap().parse::<i64>().unwrap())
+        .collect()
+}
+
+pub fn load_oneline_as_ints(filename: &str) -> Vec<i32> {
+    fs::read_to_string(filename)
+        .expect("Failed to read input file")
+        .split(',')
+        .map(|n| n.parse::<i32>().unwrap())
         .collect()
 }
 
