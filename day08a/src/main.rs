@@ -19,7 +19,7 @@ fn process_output(output: String) -> usize {
     sum
 }
 
-fn day8a(lines: &Vec<String>) -> usize {
+fn day8a(lines: &[String]) -> usize {
     let mut sum: usize = 0;
     for line in lines {
         sum += process_output(line.split(" | ").collect::<Vec<&str>>()[1].to_string());
