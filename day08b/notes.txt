@@ -1,0 +1,7 @@
+1 = 2 segments
+4 = 4 segments
+7 = 3 segments
+8 = 7 segments
+
+
+identify 
