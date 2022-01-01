@@ -62,7 +62,7 @@ fn get_pts_in_basin<'a>(
     // Remember that all points other than a 9 are always part of EXACTLY one basin
     // So flood in all directions until you hit a 9 and add all those points.
     if points.insert((x, y)) {
-        for (xp, yp) in [(x-1, y), (x, y-1), (x+1, y), (x, y+1)] {
+        for (xp, yp) in [(x - 1, y), (x, y - 1), (x + 1, y), (x, y + 1)] {
             if let Some(val) = grid.get(xp, yp) {
                 if val != 9 {
                     get_pts_in_basin(grid, xp, yp, points);
