@@ -49,7 +49,7 @@ fn get_low_points(grid: &Grid) -> HashSet<(usize, usize)> {
 }
 
 fn main() {
-    println!("Hello, world!");
+    println!("Day09a");
 
     let grid = build_grid(&aocutils::read_file_to_string(
         //"./sample_input.txt".to_string(),
