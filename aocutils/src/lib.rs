@@ -59,3 +59,8 @@ pub fn read_input_as_binaryints(filename: String) -> Vec<i64> {
         .map(|line| i64::from_str_radix(line.unwrap().as_str(), 2).unwrap())
         .collect()
 }
+
+pub fn read_file_to_string(filename: String) -> String {
+    let file = fs::read_to_string(&filename).expect("Please include input file!");
+    file.replace("\r\n", "\n")
+}
