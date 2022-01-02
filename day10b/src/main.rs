@@ -21,6 +21,16 @@ fn get_score(c: char) -> u64 {
     }
 }
 
+fn get_incomplete_char_score(c: char) -> u64 {
+    match c {
+        '(' => 1,
+        '[' => 2,
+        '{' => 3,
+        '<' => 4,
+        _ => 0,
+    }
+}
+
 fn get_brace_type(c: char) -> BraceType {
     let mut btype = BraceType::Close;
     for (ind, v) in PAIRS.iter().enumerate() {
@@ -48,6 +58,22 @@ fn get_pair(c: char) -> char {
     result
 }
 
+fn get_stack_score(stack: &Vec<char>) -> u64 {
+    let mut i = stack.len() - 1;
+    let mut score = 0;
+    while i >= 0 {
+        score = score * 5;
+        score += get_incomplete_char_score(stack[i]);
+        if i > 0 {
+            i = i - 1;
+        } else {
+            // we underflowed, oops
+            break;
+        }
+    }
+    score
+}
+
 fn lint_line(line: &[char]) -> (u64, LineType) {
     let mut line_type = LineType::Correct;
     let mut score = 0;
@@ -61,7 +87,7 @@ fn lint_line(line: &[char]) -> (u64, LineType) {
         //if stack.len() > 0 && i == line_length {
         if !stack.is_empty() && i == line_length {
             //println!("incomplete");
-            //score = get_incomplete_score(&stack);
+            score = get_stack_score(&stack);
             line_type = LineType::Incomplete;
             break;
         }
@@ -98,11 +124,12 @@ fn lint_line(line: &[char]) -> (u64, LineType) {
 }
 
 fn main() {
-    println!("Day10a");
+    println!("Day10b");
 
-    //let input = include_str!("../sample_input.txt");
+    // let input = include_str!("../sample_input.txt");
     let input = include_str!("../input.txt");
-    let mut corrupted_score = 0;
+    // let mut corrupted_score = 0;
+    let mut inc_scores = Vec::new();
 
     for (i, line) in input.lines().enumerate() {
         //println!("at line number {}, line is {}", i, line);
@@ -112,9 +139,10 @@ fn main() {
 
         match line_type {
             LineType::Corrupted => {
-                corrupted_score += score;
+                // corrupted_score += score;
             }
             LineType::Incomplete => {
+                inc_scores.push(score);
                 //println!("incomplete line, skipping...");
             }
             LineType::Correct => {
@@ -122,6 +150,10 @@ fn main() {
             }
         }
     }
+    inc_scores.sort_unstable();
 
-    println!("Corrupted line score is: {}", corrupted_score);
+    println!(
+        "Median score in incomplete scores is {}",
+        inc_scores[inc_scores.len() / 2]
+    );
 }
