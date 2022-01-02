@@ -61,11 +61,11 @@ fn get_pair(c: char) -> char {
 fn get_stack_score(stack: &Vec<char>) -> u64 {
     let mut i = stack.len() - 1;
     let mut score = 0;
-    while i >= 0 {
-        score = score * 5;
+    loop {
+        score *= 5;
         score += get_incomplete_char_score(stack[i]);
         if i > 0 {
-            i = i - 1;
+            i -= 1;
         } else {
             // we underflowed, oops
             break;
@@ -75,8 +75,8 @@ fn get_stack_score(stack: &Vec<char>) -> u64 {
 }
 
 fn lint_line(line: &[char]) -> (u64, LineType) {
-    let mut line_type = LineType::Correct;
-    let mut score = 0;
+    let line_type: LineType;
+    let score: u64;
     let line_length = line.len();
     let mut i = 0;
 
@@ -131,7 +131,7 @@ fn main() {
     // let mut corrupted_score = 0;
     let mut inc_scores = Vec::new();
 
-    for (i, line) in input.lines().enumerate() {
+    for (_i, line) in input.lines().enumerate() {
         //println!("at line number {}, line is {}", i, line);
 
         let line_chars = line.chars().collect::<Vec<char>>();
