@@ -61,11 +61,11 @@ fn fold(dots: Dots, direction: char, fvalue: u32) -> Dots {
     folded_dots
 }
 
-fn visualize(dots: Dots) {
+fn visualize(dots: &Dots) {
     let mut max_width: u32 = 0;
     let mut max_height: u32 = 0;
 
-    for dot in &dots {
+    for dot in dots {
         if dot.0 > max_width {
             max_width = dot.0;
         }
@@ -78,7 +78,7 @@ fn visualize(dots: Dots) {
 
     let mut grid: Vec<Vec<char>> = vec![vec!['.'; max_width as usize]; max_height as usize];
 
-    for dot in &dots {
+    for dot in dots {
         let x: usize = dot.0 as usize;
         let y: usize = dot.1 as usize;
         grid[y][x] = '#';
@@ -97,14 +97,11 @@ fn main() {
     let input: String = fs::read_to_string("./input.txt").unwrap();
     let (mut dots, instructions) = process_input(input);
 
-    //println!("dots:\n{:?}", dots);
-    //println!("instructions:\n{:?}", instructions);
+    for ins in instructions {
+        dots = fold(dots, ins.0, ins.1);
+    }
 
-    dots = fold(dots, instructions[0].0, instructions[0].1);
-
-    println!("dots after fold:\n{:?}", dots);
-    println!("number of dots after fold is: {}", dots.len());
     println!();
-
-    visualize(dots);
+    println!("After all folds are complete, final grid is:\n");
+    visualize(&dots);
 }
