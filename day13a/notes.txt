@@ -5,3 +5,10 @@ for a fold of y=7:
 therefore the formula is to find the difference between y and yp, and then subtract it from y:
 
 for fold = y, and coordinate (x, yp) where yp > y, new coordinate is (x, (y-(yp-y))) or (x, 2y-yp);where
+
+
+for a fold of x=5:
+(6, 0) becomes (4, 0)
+(10, 2) becomes (0, 2)
+(3, 1) stays as (3, 1)
+
