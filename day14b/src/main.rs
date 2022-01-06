@@ -39,7 +39,7 @@ fn merge(a: EleCount, b: EleCount) -> EleCount {
     c
 }
 
-fn init_ele_count(polymer: &str) -> EleCount{
+fn init_ele_count(polymer: &str) -> EleCount {
     let mut ele_count = HashMap::new();
     for c in polymer.chars() {
         *ele_count.entry(c).or_insert(0) += 1;
@@ -47,7 +47,12 @@ fn init_ele_count(polymer: &str) -> EleCount{
     ele_count
 }
 
-fn recursive_count(polymer: String, mut steps: usize, instructions: &Instructions, cache: &mut CachedCount) -> EleCount {
+fn recursive_count(
+    polymer: String,
+    mut steps: usize,
+    instructions: &Instructions,
+    cache: &mut CachedCount,
+) -> EleCount {
     if steps == 0 {
         return HashMap::<char, u64>::new();
     }
@@ -69,7 +74,12 @@ fn recursive_count(polymer: String, mut steps: usize, instructions: &Instruction
             *ele_count.entry(between).or_insert(0) += 1;
             ele_count = merge(
                 ele_count.clone(),
-                recursive_count(format!("{}{}{}", left, between, right), steps, instructions, cache),
+                recursive_count(
+                    format!("{}{}{}", left, between, right),
+                    steps,
+                    instructions,
+                    cache,
+                ),
             );
         }
     }
@@ -103,8 +113,11 @@ fn main() {
     println!("instructions:\n{:?}", instructions);
 
     let mut r_count = init_ele_count(&polymer);
-    let mut cache = HashMap::<String, HashMap::<char, u64>>::new();
-    r_count = merge(r_count, recursive_count(polymer, 40, &instructions, &mut cache));
+    let mut cache = HashMap::<String, HashMap<char, u64>>::new();
+    r_count = merge(
+        r_count,
+        recursive_count(polymer, 40, &instructions, &mut cache),
+    );
 
     println!();
     println!("final recursive_count is:");
@@ -112,6 +125,9 @@ fn main() {
 
     println!();
     let (min, max) = get_min_max(r_count);
-    println!("most common element has quantity of {}, least common element has quantity of {}", min, max);
-    println!("Difference between them is: {}", max-min);
+    println!(
+        "most common element has quantity of {}, least common element has quantity of {}",
+        min, max
+    );
+    println!("Difference between them is: {}", max - min);
 }
